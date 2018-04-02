@@ -7,3 +7,29 @@
 `node_modules/webpack/bin/webpack.js`  
 ▶ブラウザで下記URLを開く  
 `http://localhost:8080/`  
+  
+※ eslint設定参考　eslintはこの環境に入ってないため適時対応 google styleベース  
+npm install -g eslint babel-eslint eslint-plugin-react  
+
+``` 
+module.exports = {
+  "extends": "google",
+  "env": {
+      // browser グローバル変数を使用する
+      "browser": true,
+  },
+  "parser": "babel-eslint",
+  "plugins": [
+    //Reactのチェックに必要
+    "react"
+  ],
+  "rules": {
+      // インデントスタイルは2スペースに強制
+      "indent": ["error", 2],
+      // 改行コードはWindows
+      "linebreak-style": ["error", "windows"],
+      //未定義が鬱陶しいのでとりあえず無効　追加
+      "no-unused-vars": 0
+  },
+};
+```
