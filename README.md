@@ -9,7 +9,7 @@
 `http://localhost:8080/`  
   
 ※ eslint設定参考　eslintはこの環境に入ってないため適時対応 google styleベース  
-npm install -g eslint babel-eslint eslint-plugin-react  
+npm install -g eslint babel-eslint eslint-plugin-react eslint-config-google
 
 ``` 
 module.exports = {
