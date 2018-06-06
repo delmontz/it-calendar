@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --config ./webpack.config.js --mode development --watch",
-    "test": "echo \"No test specified\" && exit 0"
+    "test": "echo \"No test specified\" && exit 0",
+    "build": "./node_modules/webpack/bin/webpack.js"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +23,7 @@
   },
   "dependencies": {
     "babel-preset-env": "^1.6.1",
+    "office-ui-fabric-react": "^6.5.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0"
   }
