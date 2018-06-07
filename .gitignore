@@ -1,2 +1,5 @@
 node_modules/
 src/bundle.js
+yarn.lock
+yarn-error.log
+package-lock.json
