@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const path = require('path');
 
 module.exports = {
   entry: [
@@ -17,7 +18,7 @@ module.exports = {
     extensions: ['*', '.js', '.jsx']
   },
   output: {
-    path: __dirname + '/public',
+    path: path.resolve(__dirname, '../firebase/public'),
     publicPath: '/',
     filename: 'bundle.js'
   },
