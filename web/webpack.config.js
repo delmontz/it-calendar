@@ -24,7 +24,8 @@ module.exports = {
   },
   plugins: [
   ],
+  devtool: 'inline-source-map',
   devServer: {
-    contentBase: './public',
+    contentBase: path.resolve(__dirname, '../firebase/public'),
   }
 };
