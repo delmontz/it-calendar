@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-const title = 'Daily Gadget Lab';
+import App from './container/AppContainer'
 
 ReactDOM.render(
-  <div>{title}</div>,
-  document.getElementById('app')
+  <App />,
+  document.getElementById('app_container')
 );
