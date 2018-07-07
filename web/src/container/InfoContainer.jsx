@@ -20,11 +20,11 @@ const styles = theme => ({
     color: theme.palette.text.secondary
   },
   card: {
-    maxHeight: 800
+    Height: 800,
+    Width: 1000
   },
   media: {
-    maxHeight: 200,
-    paddingTop: '56.25%' // 16:9
+    paddingTop: '56.25%' // 16:9 必須？
   }
 });
 
@@ -37,7 +37,7 @@ class InfoContainer extends React.Component{
    render(){
       return (
         <div className={this.props.classes.root}>
-          <Grid container spacing={24}>
+          <Grid container spacing={24} justify="center">
             <Grid item xs={12}>
               <Paper className={this.props.classes.paper}>　ギークカレンダー（仮）</Paper>
             </Grid>
@@ -46,8 +46,8 @@ class InfoContainer extends React.Component{
                 <CardMedia
                   className={this.props.classes.media}
                   title="Contemplative Reptile"
+                  image="https://dgl.tokyo/wp-content/uploads/2018/01/h_DSC_0975-1.jpg"
                 >
-                <img src="https://dgl.tokyo/wp-content/uploads/2018/01/h_DSC_0975-1.jpg"/>
                 </CardMedia>
                 <CardContent>
                   <Typography gutterBottom variant="headline" component="h2">
