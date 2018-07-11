@@ -43,12 +43,16 @@ const MONTHS = [
      color: '#4169e1',
      backgroundColor: '#fffdee'
    },
+   //today selectedが内部属性にある詳しくはdoc参照
+   today: { 
+    backgroundColor: '#2f4f4f',
+    color: 'white'
+   },
+   selected: {
+    backgroundColor: 'orange',
+    color: 'white'
+   }
  };
-
- const toDayStyle = `.DayPicker-Day--today {
-   background-color: #2f4f4f;
-   color: white;
- }`;
 
 export default class DayPickerComponent extends React.Component {
   constructor(props) {
