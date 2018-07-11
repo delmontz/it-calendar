@@ -25,17 +25,17 @@ class AppContainer extends React.Component{
    render(){
       return (
          <div className={this.props.classes.root}>
-           <Grid container spacing={24}>
-             <Grid item xs={12}>
-               <Paper className={this.props.classes.paper}>xs=12</Paper>
-             </Grid>
-             <Grid item xs={12} sm={6}>
-               <Paper className={this.props.classes.paper}>xs=12 sm=6</Paper>
-             </Grid>
-             <Grid item xs={12} sm={6}>
-               <Paper className={this.props.classes.paper}>xs=12 sm=6</Paper>
-             </Grid>
-           </Grid>
+          <Grid container spacing={24}>
+            <Grid item xs={12}>
+              <Paper className={this.props.classes.paper}>xs=12</Paper>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Paper className={this.props.classes.paper}>xs=12 sm=6</Paper>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Paper className={this.props.classes.paper}>xs=12 sm=6</Paper>
+            </Grid>
+          </Grid>
          </div>
        );
    }

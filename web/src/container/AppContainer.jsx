@@ -22,21 +22,22 @@ class AppContainer extends React.Component{
    render(){
       return (
          <div className={this.props.classes.root}>
-           <Grid container spacing={24}>
+          <Grid container spacing={24}>
              <Grid item xs={12}>
                <Info />
              </Grid>
-             <Grid item xs={12} sm={6}>
+          </Grid>
+          <Grid container spacing={24}>
+             <Grid item xs={9}>
                <Body />
              </Grid>
-             <Grid item xs={12} sm={6}>
+             <Grid item xs={3}>
                <Sidebar />
              </Grid>
-           </Grid>
+          </Grid>
          </div>
        );
    }
-
 }
 
 export default withStyles(styles)(AppContainer);
