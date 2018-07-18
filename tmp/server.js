@@ -11,20 +11,20 @@ app.use('/api', router);
 // url: http://localhost:3000/api/
 router.get('/', (request, response) => {
    web.get('https://connpass.com/api/v1/event/')
-      .query({ym: '201802'})
+      .query({ym: request.query.period})
       .end(function(err, res){
          console.log('Done!!');
-         response.json(createEventData(res.body));
+         response.json(createEventData(res.body, request.query.period));
       });
 });
 
 // set the server to listen on port 3000
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
-function createEventData(rawData){
+function createEventData(rawData, period){
    /* イベント情報構造体 */
    let eventData = {
-      monthly: '201802',
+      monthly: period,
       events: []
    }
    /* 取得データより構造体作成 */
