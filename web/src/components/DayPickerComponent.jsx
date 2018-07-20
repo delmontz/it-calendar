@@ -1,6 +1,7 @@
 import React from 'react';
 import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
+import {inject, observer} from 'mobx-react';
 
 const MONTHS = [
    '1月',
@@ -54,6 +55,8 @@ const MONTHS = [
    }
  };
 
+ @inject('eventStore')
+ @observer
 export default class DayPickerComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -63,6 +66,7 @@ export default class DayPickerComponent extends React.Component {
     };
   }
   handleDayClick(day, { selected }) {
+    this.props.eventStore.setSelectingDate(day);
     this.setState({
       selectedDay: selected ? undefined : day,
     });
@@ -73,7 +77,7 @@ export default class DayPickerComponent extends React.Component {
           <p>
           {this.state.selectedDay
             ? ('選択中の日付　' + this.state.selectedDay.toLocaleDateString())
-            : '>>日付を選択してください<< 👻'}
+            : '>>日付を選択してください<< 👌'}
         </p>
         <DayPicker
          locale="ja"

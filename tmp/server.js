@@ -5,13 +5,23 @@ const port = 3000;
 const web = require('superagent');
 
 // all routes prefixed with /api
+var allowCrossDomain = function(req, res, next) {
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Headers', 'X-Requested-With');
+      next();
+    }
+app.use(allowCrossDomain);
 app.use('/api', router);
 
 // using router.get() to prefix our path
 // url: http://localhost:3000/api/
 router.get('/', (request, response) => {
    web.get('https://connpass.com/api/v1/event/')
-      .query({ym: request.query.period})
+      .query({
+         ymd: request.query.period,
+         count: 100,
+         order: 2
+      })
       .end(function(err, res){
          console.log('Done!!');
          response.json(createEventData(res.body, request.query.period));
@@ -38,7 +48,7 @@ function createEventData(rawData, period){
          open_time: resData.started_at,
          place: resData.place,
          address: resData.address,
-         thumb: 'null'      
+         thumb: 'https://connpass.com/static/img/api/connpass_logo_1.png'      
       };
       eventData.events.push(eventContent);
    }
