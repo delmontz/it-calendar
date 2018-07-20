@@ -9,11 +9,11 @@ import Typography from '@material-ui/core/Typography';
 const styles = theme => ({
    card: {
      display: 'flex',
+     justifyContent: 'space-between'
    },
    details: {
      display: 'flex',
-     flexDirection: 'column',
-     justifyContent: 'flex-end'
+     flexDirection: 'column'
    },
    content: {
      flex: '1 0 auto'
@@ -39,7 +39,7 @@ class EventCardComponent extends React.Component{
                   <CardContent className={classes.content}>
                      <Typography variant="headline">{eventData.title}</Typography>
                      <Typography variant="subheading" color="textSecondary">{eventData.description}</Typography>
-                     <Typography variant="subheading" color="textSecondary">{eventData.open_time.toDateString()}</Typography>
+                     <Typography variant="subheading" color="textSecondary">{eventData.open_time}</Typography>
                      <Typography variant="subheading" color="textSecondary">{eventData.place}</Typography>
                      <Typography variant="subheading" color="textSecondary">{eventData.address}</Typography>
                   </CardContent>
@@ -47,7 +47,7 @@ class EventCardComponent extends React.Component{
             <CardMedia
                className={classes.cover}
                image={eventData.thumb}
-               title="Live from space album cover"
+               title='イベントサムネイル'
             />
             </Card>
          </div>
