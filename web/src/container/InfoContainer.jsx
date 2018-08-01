@@ -14,9 +14,9 @@ const styles = theme => ({
     flexGrow: 1,
     backgroundColor: '#D5E8D4'
   },
-  paper: {
-    padding: theme.spacing.unit * 2,
+  title: {
     textAlign: "center",
+    fontFamily: 'SuperCoolMyFont',
     color: theme.palette.text.secondary
   },
   card: {
@@ -39,7 +39,7 @@ class InfoContainer extends React.Component{
         <div className={this.props.classes.root}>
           <Grid container spacing={24} justify="center">
             <Grid item xs={12}>
-              <Paper className={this.props.classes.paper}>　ギークカレンダー（仮）</Paper>
+              <Paper className={this.props.classes.title}>　ギークカレンダー（仮）</Paper>
             </Grid>
             <Grid item xs={12}>
               <Card className={this.props.classes.card}>
