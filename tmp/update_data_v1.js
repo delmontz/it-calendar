@@ -27,7 +27,7 @@ db.settings({timestampsInSnapshots: true});
 
 getEventTbl(PERIOD).then(event_tbl => {
    /* 新着確認 */
-   checkUpdate(event_tbl);
+   checkNewr(event_tbl);
 });
 
 /**************************************************************************************/
@@ -82,7 +82,7 @@ async function getEventTbl(period){
    return event_tbl;
 }
 
-async function checkUpdate(event_tbl){
+async function checkNewr(event_tbl){
 	let new_event_data_tbl = [];
    let new_event_id_tbl = [];
    let update_flg = false;
@@ -94,7 +94,7 @@ async function checkUpdate(event_tbl){
 			conpass_tbl.event_data_tbl.forEach((eventdata, index) => {
 				next_page_flg = false;
 				if(!event_id_tbl.includes(eventdata.event_id)){
-               console.log('イベントID:%dを追加');
+               console.log('イベントID:%dを追加', eventdata.event_id);
                new_event_id_tbl.push(eventdata.event_id);
 					new_event_data_tbl.push(eventdata);
 					update_flg = true;
