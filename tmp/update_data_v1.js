@@ -85,11 +85,9 @@ async function getEventTbl(period){
 async function checkUpdate(event_tbl){
 	let new_event_data_tbl = [];
    let new_event_id_tbl = [];
-   let new_event_update_tbl = [];
    let update_flg = false;
    let next_page_flg = true;
    let event_id_tbl = event_tbl.event_id_tbl;
-   let event_update_tbl = event_tbl.event_update_tbl;
 	for(let n = 0; next_page_flg; n++){
 		console.log('%d順目', n);
 		await getConpassMasterTbl(PERIOD, ((n * ACQUISITION) + 1), NEWER).then(conpass_tbl => {
@@ -98,7 +96,6 @@ async function checkUpdate(event_tbl){
 				if(!event_id_tbl.includes(eventdata.event_id)){
                console.log('イベントID:%dを追加');
                new_event_id_tbl.push(eventdata.event_id);
-               new_event_update_tbl.push(eventdata.updated);
 					new_event_data_tbl.push(eventdata);
 					update_flg = true;
 					/* 最終インデックスが更新対象だった場合次のループも実行 */
@@ -113,11 +110,10 @@ async function checkUpdate(event_tbl){
 	if(update_flg){
       /* イベントID＆更新時間テーブル更新 */
       Array.prototype.push.apply(event_id_tbl, new_event_id_tbl);
-      Array.prototype.push.apply(event_update_tbl, new_event_update_tbl);
       db.collection('EventData').doc('conpass').collection(PERIOD).doc('0_event_tbl')
-         .set({'event_id_tbl': event_id_tbl, 'event_update_tbl': event_update_tbl})
+         .set({'event_id_tbl': event_id_tbl})
          .then(() => {
-            console.log('イベントID＆更新時間テーブルの書き込み完了');
+            console.log('イベントIDテーブルの書き込み完了');
       }).catch(err => {
          console.log(err);
       });

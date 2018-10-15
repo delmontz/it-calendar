@@ -32,7 +32,6 @@ async function createMonthlyEventTbl(period){
    let month = period.slice(4);
    let acquired_data;
    let event_id_record = [];
-   let event_update_record = [];
 
    /* 日毎にデータ書き込み */
    for(let day = 1; day <= getDay(period); day++){
@@ -41,7 +40,6 @@ async function createMonthlyEventTbl(period){
       for(let n = 0; acquired_data.available > 0; n++){
         acquired_data = await getDailyEventData(year, month, day, ((n * ACQUISITION) + 1));
         Array.prototype.push.apply(event_id_record, acquired_data.event_id_tbl);
-        Array.prototype.push.apply(event_update_record, acquired_data.event_update_tbl);
         _acquired_num++;
       }
       console.log('ステージ:' + _acquired_num);
@@ -51,12 +49,11 @@ async function createMonthlyEventTbl(period){
    event_id_record.sort((x, y) => {
       return x - y;
    });
-   event_update_record.sort();
    /* イベントIDと更新時間テーブルの書き込み */
    db.collection('EventData').doc('conpass').collection(PERIOD).doc('0_event_tbl')
-      .set({'event_id_tbl': event_id_record, 'event_update_tbl': event_update_record})
+      .set({'event_id_tbl': event_id_record})
       .then(() => {
-         console.log('イベントID＆更新時間テーブルの書き込み完了');
+         console.log('イベントIDテーブルの書き込み完了');
       }).catch(err => {
          console.log(err);
    });
@@ -66,8 +63,7 @@ async function getDailyEventData(year, month, day, index){
    let eventTbl = {
       available: 0,
       event_data: [],
-      event_id_tbl: [],
-      event_update_tbl: []
+      event_id_tbl: []
    };
    let acquired_data = {};
    try{
@@ -102,15 +98,13 @@ async function getDailyEventData(year, month, day, index){
   }
   eventTbl.available = acquired_body.results_available - (index + ACQUISITION);
 
-   /* レコードにセット書き込み,イベントIDテーブルと更新時間テーブルの作成*/
+   /* レコードにセット書き込み,イベントIDテーブルの作成*/
    let batch = db.batch();
    for(let i = 0; i < eventTbl.event_data.length; i++){
       let event_id = eventTbl.event_data[i].event_id;
-      let update = eventTbl.event_data[i].updated
       let record = db.collection('EventData').doc('conpass').collection(PERIOD).doc(String(event_id));
       batch.set(record, eventTbl.event_data[i]);
       eventTbl.event_id_tbl.push(event_id);
-      eventTbl.event_update_tbl.push(update);
    };
    await batch.commit().then(() => {
       console.log(day + '日目Firestore登録完了!!');
