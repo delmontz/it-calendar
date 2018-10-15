@@ -25,8 +25,6 @@ firebase.initializeApp({
 const db = firebase.firestore();
 db.settings({timestampsInSnapshots: true});
 
-let new_event_data_tbl = [];
-let new_event_id_tbl = [];
 getEventIdTbl(PERIOD).then(event_id_tbl => {
    /* 新着確認 */
    checkUpdate(event_id_tbl);
@@ -84,17 +82,20 @@ async function getEventIdTbl(period){
 }
 
 async function checkUpdate(event_id_tbl){
+	let new_event_data_tbl = [];
+	let new_event_id_tbl = [];
    let update_flg = false;
    let next_page_flg = true;
 	for(let n = 0; next_page_flg; n++){
+		console.log('%d順目', n);
 		await getConpassMasterTbl(PERIOD, ((n * ACQUISITION) + 1), NEWER).then(conpass_tbl => {
 			conpass_tbl.event_data_tbl.forEach((eventdata, index) => {
-				console.log('%d順目', n);
 				next_page_flg = false;
 				if(!event_id_tbl.includes(eventdata.event_id)){
                console.log('イベントID:%dを追加');
 					new_event_id_tbl.push(eventdata.event_id);
 					new_event_data_tbl.push(eventdata);
+					update_flg = true;
 					/* 最終インデックスが更新対象だった場合次のループも実行 */
 					if(((index + 1) % ACQUISITION) == 0){
 						next_page_flg = true;
@@ -103,5 +104,28 @@ async function checkUpdate(event_id_tbl){
 			});
 		});
 	}
-	console.log('%s:更新チェック完了', PERIOD);
+	/* 新着データ登録 */
+	if(update_flg){
+      /* イベントIDテーブル更新 */
+      Array.prototype.push.apply(event_id_tbl, new_event_id_tbl);
+      db.collection('EventData').doc('conpass').collection(PERIOD).doc('0_event_id_tbl').set({'event_id_tbl': event_id_tbl})
+         .then(() => {
+            console.log('イベントIDテーブルの書き込み完了');
+         }).catch(err => {
+            console.log(err);
+         });
+      /* イベントデータテーブル更新 */
+      let batch = db.batch();
+      for(let i = 0; i < new_event_data_tbl.length; i++){
+         let event_id = new_event_data_tbl[i].event_id;
+         let record = db.collection('EventData').doc('conpass').collection(PERIOD).doc(String(event_id));
+         batch.set(record, new_event_data_tbl[i]);
+      };
+      await batch.commit().then(() => {
+         console.log('イベントデータテーブル更新完了');
+      }).catch(err => {
+         console.log(err);
+      });
+	}
+	console.log('%s:新着チェック完了', PERIOD);
 }
