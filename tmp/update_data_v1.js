@@ -25,9 +25,9 @@ firebase.initializeApp({
 const db = firebase.firestore();
 db.settings({timestampsInSnapshots: true});
 
-getEventIdTbl(PERIOD).then(event_id_tbl => {
+getEventTbl(PERIOD).then(event_tbl => {
    /* 新着確認 */
-   checkUpdate(event_id_tbl);
+   checkUpdate(event_tbl);
 });
 
 /**************************************************************************************/
@@ -61,7 +61,8 @@ async function getConpassMasterTbl(period, index, order){
         open_time: events.started_at,
         place: events.place,
         address: events.address,
-        url: events.event_url
+        url: events.event_url,
+        updated: events.updated_at
      };
      eventdata.event_data_tbl.push(eventContent);
   }
@@ -70,22 +71,25 @@ async function getConpassMasterTbl(period, index, order){
   return eventdata;
 }
 
-async function getEventIdTbl(period){
-   let event_id_tbl;
-   let record_ref = db.collection('EventData').doc('conpass').collection(period).doc('0_event_id_tbl');
+async function getEventTbl(period){
+   let event_tbl;
+   let record_ref = db.collection('EventData').doc('conpass').collection(period).doc('0_event_tbl');
    await record_ref.get().then(snapshot => {
-      event_id_tbl = snapshot.data().event_id_tbl;
+      event_tbl = snapshot.data();
 	}).catch(err => {
 			console.log(err);
    });
-   return event_id_tbl;
+   return event_tbl;
 }
 
-async function checkUpdate(event_id_tbl){
+async function checkUpdate(event_tbl){
 	let new_event_data_tbl = [];
-	let new_event_id_tbl = [];
+   let new_event_id_tbl = [];
+   let new_event_update_tbl = [];
    let update_flg = false;
    let next_page_flg = true;
+   let event_id_tbl = event_tbl.event_id_tbl;
+   let event_update_tbl = event_tbl.event_update_tbl;
 	for(let n = 0; next_page_flg; n++){
 		console.log('%d順目', n);
 		await getConpassMasterTbl(PERIOD, ((n * ACQUISITION) + 1), NEWER).then(conpass_tbl => {
@@ -93,7 +97,8 @@ async function checkUpdate(event_id_tbl){
 				next_page_flg = false;
 				if(!event_id_tbl.includes(eventdata.event_id)){
                console.log('イベントID:%dを追加');
-					new_event_id_tbl.push(eventdata.event_id);
+               new_event_id_tbl.push(eventdata.event_id);
+               new_event_update_tbl.push(eventdata.updated);
 					new_event_data_tbl.push(eventdata);
 					update_flg = true;
 					/* 最終インデックスが更新対象だった場合次のループも実行 */
@@ -106,14 +111,16 @@ async function checkUpdate(event_id_tbl){
 	}
 	/* 新着データ登録 */
 	if(update_flg){
-      /* イベントIDテーブル更新 */
+      /* イベントID＆更新時間テーブル更新 */
       Array.prototype.push.apply(event_id_tbl, new_event_id_tbl);
-      db.collection('EventData').doc('conpass').collection(PERIOD).doc('0_event_id_tbl').set({'event_id_tbl': event_id_tbl})
+      Array.prototype.push.apply(event_update_tbl, new_event_update_tbl);
+      db.collection('EventData').doc('conpass').collection(PERIOD).doc('0_event_tbl')
+         .set({'event_id_tbl': event_id_tbl, 'event_update_tbl': event_update_tbl})
          .then(() => {
-            console.log('イベントIDテーブルの書き込み完了');
-         }).catch(err => {
-            console.log(err);
-         });
+            console.log('イベントID＆更新時間テーブルの書き込み完了');
+      }).catch(err => {
+         console.log(err);
+      });
       /* イベントデータテーブル更新 */
       let batch = db.batch();
       for(let i = 0; i < new_event_data_tbl.length; i++){
