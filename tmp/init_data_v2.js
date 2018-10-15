@@ -34,7 +34,7 @@ async function createMonthlyEventTbl(period){
    let event_id_record = [];
 
    /* 日毎にデータ書き込み */
-    for(let day = 1; day <= getDay(period); day++){
+   for(let day = 1; day <= getDay(period); day++){
 		let _acquired_num = 0;
 		acquired_data = {available: 1}; /* 必ず一度は実行 */
       for(let n = 0; acquired_data.available > 0; n++){
@@ -45,7 +45,10 @@ async function createMonthlyEventTbl(period){
       console.log('ステージ:' + _acquired_num);
       console.log('###################################');
    }
-
+   /* イベントIDソーティング */
+   event_id_record.sort((x, y) => {
+      return x - y;
+   });
    /* イベントIDテーブルの書き込み */
    db.collection('EventData').doc('conpass').collection(PERIOD).doc('0_event_id_tbl').set({'event_id_tbl': event_id_record})
     .then(() => {
@@ -95,7 +98,7 @@ async function getDailyEventData(year, month, day, index){
 
    /* レコードにセット書き込み,イベントIDテーブルの作成*/
    let batch = db.batch();
-   for(var i = 0; i < eventTbl.event_data.length; i++){
+   for(let i = 0; i < eventTbl.event_data.length; i++){
       let event_id = eventTbl.event_data[i].event_id;
       let record = db.collection('EventData').doc('conpass').collection(PERIOD).doc(String(event_id));
       batch.set(record, eventTbl.event_data[i]);
