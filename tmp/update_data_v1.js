@@ -34,7 +34,7 @@ getEventIdTbl(PERIOD).then(event_id_tbl => {
 
 /**************************************************************************************/
 
-async function getConpassMasterTbl(period, index, hoge){
+async function getConpassMasterTbl(period, index, order){
    let eventdata = {
       available: 0,
       event_data_tbl: []
@@ -45,7 +45,7 @@ async function getConpassMasterTbl(period, index, hoge){
      .query({
         ym: period,
         count: ACQUISITION,
-        order: hoge,
+        order: order,
         start: index
      });
   }catch(err){
@@ -89,18 +89,19 @@ async function checkUpdate(event_id_tbl){
 	for(let n = 0; next_page_flg; n++){
 		await getConpassMasterTbl(PERIOD, ((n * ACQUISITION) + 1), NEWER).then(conpass_tbl => {
 			conpass_tbl.event_data_tbl.forEach((eventdata, index) => {
-            console.log(index);
+				console.log('%d順目', n);
+				next_page_flg = false;
 				if(!event_id_tbl.includes(eventdata.event_id)){
                console.log('イベントID:%dを追加');
 					new_event_id_tbl.push(eventdata.event_id);
-               new_event_data_tbl.push(eventdata);
-               next_page_flg = false;
-            }
-            /* 最終インデックスが更新対象だった場合次のループも実行 */
-            if(((index + 1) % ACQUISITION) == 0){
-               next_page_flg = true;
-            }
+					new_event_data_tbl.push(eventdata);
+					/* 最終インデックスが更新対象だった場合次のループも実行 */
+					if(((index + 1) % ACQUISITION) == 0){
+						next_page_flg = true;
+					}
+				}
 			});
 		});
 	}
+	console.log('%s:更新チェック完了', PERIOD);
 }
