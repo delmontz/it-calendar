@@ -3,4 +3,5 @@ firebase/public/bundle.js
 yarn.lock
 yarn-error.log
 package-lock.json
+.env
 
