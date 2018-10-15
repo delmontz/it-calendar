@@ -27,7 +27,7 @@ db.settings({timestampsInSnapshots: true});
 
 getEventTbl(PERIOD).then(event_tbl => {
    /* 新着確認 */
-   checkNewr(event_tbl);
+   checkNewer(event_tbl);
 });
 
 /**************************************************************************************/
@@ -82,7 +82,7 @@ async function getEventTbl(period){
    return event_tbl;
 }
 
-async function checkNewr(event_tbl){
+async function checkNewer(event_tbl){
 	let new_event_data_tbl = [];
    let new_event_id_tbl = [];
    let update_flg = false;
