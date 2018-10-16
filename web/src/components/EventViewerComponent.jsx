@@ -21,11 +21,11 @@ class EventViewerComponent extends React.Component{
       //最初はとりあえず現日付のイベントを取得表示
       const current_time = new Date();
       let self = this;
-      web.get('http://localhost:3000/api')
+      web.get('http://c1.dgl.tokyo:3000/api')
       .query({period: '' + current_time.getFullYear() + ('00' + (current_time.getMonth() + 1)).slice(-2) + ('00' + current_time.getDate()).slice(-2)})
-      .then(function(res){
+      .then(res => {
         props.eventStore.acquired_event_data = res.body;
-        self.setState({res_comp_flg: true});
+        this.setState({res_comp_flg: true});
       });
 
    }
