@@ -27,7 +27,10 @@ db.settings({ timestampsInSnapshots: true });
 
 getEventTbl(PERIOD).then(event_tbl => {
    /* 新着確認 */
-   checkNewer(event_tbl);
+   checkNewer(event_tbl).then(() => {
+      /* 更新確認 */
+      checkUpdate();
+   });
 });
 
 /**************************************************************************************/
@@ -130,18 +133,29 @@ async function checkNewer(event_tbl) {
          console.log(err);
       });
    }
-   console.log('%s:新着チェック完了', PERIOD);
+   console.log('----------------------------------%s:新着チェック完了----------------------------------', PERIOD);
 }
 
 async function checkUpdate() {
+   let current_date;
+   let new_event_data_tbl = [];
+   let next_page_flg = true;
+   let update_flg = false;
+   /* イベントデータテーブルの最新更新時間を取得 */
+   let serch_ref = db.collection('EventData').doc('conpass').collection(PERIOD);
+   let query = serch_ref.orderBy('updated', 'desc').limit(1);
+   await query.get().then(snapshot => {
+      current_date = new Date(snapshot.docs[0].data().updated);
+   });
    for (let n = 0; next_page_flg; n++) {
       console.log('%d順目', n);
-      await getConpassMasterTbl(PERIOD, ((n * ACQUISITION) + 1), NEWER).then(conpass_tbl => {
+      await getConpassMasterTbl(PERIOD, ((n * ACQUISITION) + 1), UPDATETIME).then(conpass_tbl => {
+         next_page_flg = false;
          conpass_tbl.event_data_tbl.forEach((eventdata, index) => {
-            next_page_flg = false;
-            if (!event_id_tbl.includes(eventdata.event_id)) {
-               console.log('イベントID:%dを追加', eventdata.event_id);
-               new_event_id_tbl.push(eventdata.event_id);
+            let latest_date = new Date(eventdata.updated);
+            /* 更新対象判定 */
+            if(current_date.getTime() < latest_date.getTime()){
+               console.log('イベントID:%dを更新', eventdata.event_id);
                new_event_data_tbl.push(eventdata);
                update_flg = true;
                /* 最終インデックスが更新対象だった場合次のループも実行 */
@@ -152,4 +166,20 @@ async function checkUpdate() {
          });
       });
    }
+   /* 更新データ登録 */
+   if(update_flg == true){
+      /* イベントデータテーブル更新 */
+      let batch = db.batch();
+      for (let i = 0; i < new_event_data_tbl.length; i++) {
+         let event_id = new_event_data_tbl[i].event_id;
+         let record = db.collection('EventData').doc('conpass').collection(PERIOD).doc(String(event_id));
+         batch.set(record, new_event_data_tbl[i]);
+      };
+      await batch.commit().then(() => {
+         console.log('イベントデータテーブル更新完了');
+      }).catch(err => {
+         console.log(err);
+      });
+   }
+   console.log('----------------------------------%s:更新チェック完了----------------------------------', PERIOD);
 }
