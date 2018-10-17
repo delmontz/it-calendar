@@ -16,7 +16,7 @@ DB.settings({ timestampsInSnapshots: true });
 
 exports.getEventData = functions.region('asia-northeast1').https.onRequest(async (req, res) => {
    let ym = req.query.ymd.substr(0, 6);
-   let day = Number(req.query.ymd.substr(7, 2));
+   let day = Number(req.query.ymd.substr(6, 2));
    let event_data_tbl = [];
    let ref = DB.collection('EventData').doc('conpass').collection(ym).where('date', '==', day);
    await ref.get().then(snapshot => {
