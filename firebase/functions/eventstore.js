@@ -15,9 +15,14 @@ const DB = firebase.firestore();
 DB.settings({ timestampsInSnapshots: true });
 
 exports.getEventData = functions.region('asia-northeast1').https.onRequest(async (req, res) => {
-   let event_data;
-   await DB.collection('EventData').doc('conpass').collection('201808').doc('101899').get().then(snapshot => {
-      event_data = snapshot.data();
+   let ym = req.query.ymd.substr(0, 6);
+   let day = Number(req.query.ymd.substr(7, 2));
+   let event_data_tbl = [];
+   let ref = DB.collection('EventData').doc('conpass').collection(ym).where('date', '==', day);
+   await ref.get().then(snapshot => {
+      snapshot.forEach(event_data => {
+         event_data_tbl.push(event_data.data());
+      });
    });
-   res.status(200).send(event_data);
+   res.status(200).send(event_data_tbl);
 });

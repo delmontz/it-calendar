@@ -57,10 +57,13 @@ async function getConpassMasterTbl(period, index, order) {
    let acquired_body = acquired_data.body;
    for (let i = 0; i < acquired_body.results_returned; i++) {
       let events = acquired_body.events[i];
+      let date = new Date(events.started_at);
       let eventContent = {
          event_id: events.event_id,
          title: events.title,
          description: events.description,
+         date: date.getDate(),
+         time: date.toTimeString(),
          open_time: events.started_at,
          place: events.place,
          address: events.address,
