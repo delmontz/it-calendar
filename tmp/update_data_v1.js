@@ -68,7 +68,8 @@ async function getConpassMasterTbl(period, index, order) {
          place: events.place,
          address: events.address,
          url: events.event_url,
-         updated: events.updated_at
+         updated: events.updated_at,
+         prefecture: await getPrefecture(events.address)
       };
       eventdata.event_data_tbl.push(eventContent);
    }
@@ -185,4 +186,33 @@ async function checkUpdate() {
       });
    }
    console.log('----------------------------------%s:更新チェック完了----------------------------------', PERIOD);
+}
+
+async function getPrefecture(address){
+   let result = '';
+
+   if(address){
+      address = String(address);
+      result = address.match(/([^市区町村]{2}[都道府県]|[^市区町村]{3}県)/);
+      if(result){
+         result = result[0];
+      }else{
+         await web.get('https://maps.googleapis.com/maps/api/place/textsearch/json')
+         .query({
+            key: ENV.GOOGLE_MAP_PLACE,
+            language: 'ja',
+            query: address
+         }).then(res => {
+            res = res.body;
+            if(res.status === 'OK'){
+               result = res.results[0].formatted_address.replace(/^(.+?) /, '');
+               result = result.match(/([^市区町村]{2}[都道府県]|[^市区町村]{3}県)/);
+               result = result[0];
+            }else{
+               result = address;
+            }
+         });
+      }
+   }
+   return result.trim();
 }
