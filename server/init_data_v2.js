@@ -5,7 +5,7 @@ require('dotenv').config();
 const ENV = process.env;
 
 /* config */
-const PERIOD = '201808';
+const PERIOD = '2018010';
 const ACQUISITION = 100;
 
 /******************/
