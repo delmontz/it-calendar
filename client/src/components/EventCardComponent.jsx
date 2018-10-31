@@ -40,12 +40,12 @@ class EventCardComponent extends React.Component {
                      title={<h1>{eventData.title}</h1>}
                   />
                   <Typography variant="h6">📅日時</Typography>
-                  <Typography variant="subheading" color="textSecondary">{this.getOpenTime(eventData.open_time)}</Typography>
+                  <Typography variant="body1" color="textSecondary">{this.getOpenTime(eventData.open_time)}</Typography>
                   <Typography variant="h6">🌏場所</Typography>
-                  <Typography variant="subheading" color="textSecondary">{eventData.place}</Typography>
+                  <Typography variant="body1" color="textSecondary">{eventData.place}</Typography>
                   <Typography variant="h6">🏡住所</Typography>
-                  <Typography variant="subheading" color="textSecondary">{eventData.address}</Typography>
-                  <Typography variant="subheading" color="textSecondary"><div dangerouslySetInnerHTML={{ __html: eventData.description }} /></Typography>
+                  <Typography variant="body1" color="textSecondary">{eventData.address}</Typography>
+                  <Typography variant="body1" color="textSecondary"><div dangerouslySetInnerHTML={{ __html: eventData.description }} /></Typography>
                </CardContent>
             </Card>
          </div>
