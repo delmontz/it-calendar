@@ -1,11 +1,24 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import web from "superagent";
-import EventCard from "./EventCardComponent"
 import {inject, observer} from 'mobx-react';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Button from '@material-ui/core/Button';
+import ArrowUpward from '@material-ui/icons/ArrowUpward';
+
+import EventCard from './EventCardComponent';
 
 const styles = theme => ({
+   button: {
+      margin: theme.spacing.unit
+    },
+   rightIcon: {
+      marginLeft: theme.spacing.unit,
+    },
+    div: {
+      display: 'flex',
+      justifyContent: 'flex-end'
+    }
 });
 
 @inject('eventStore')
@@ -14,46 +27,52 @@ class EventViewerComponent extends React.Component{
    
    constructor(props){
       super(props);
-      this.state = {
-        res_comp_flg: false
-      }
-
-      //最初はとりあえず現日付のイベントを取得表示
-      const current_time = new Date();
-      let self = this;
-      web.get('http://c1.dgl.tokyo:3000/api')
-      .query({period: '' + current_time.getFullYear() + ('00' + (current_time.getMonth() + 1)).slice(-2) + ('00' + current_time.getDate()).slice(-2)})
-      .then(res => {
-        props.eventStore.acquired_event_data = res.body;
-        this.setState({res_comp_flg: true});
-      });
-
    }
 
    render(){
+      const { classes } = this.props;
+
       return (
          <Grid container spacing={24}>
-            <Grid item　xs={12}>
-              <h1>{this.props.eventStore.view_current_str}</h1>
-            </Grid>
-            <Grid item　xs={12}>
-              {(() => {
-                  if(this.state.res_comp_flg == true){
-                    let events = this.props.eventStore.acquired_event_data.events;
-                    let event_card_list = [];
-                    for(let i = 0; i < events.length; i++){
-                      event_card_list.push(
-                        <EventCard eventData={events[i]}/>
-                      );
-                    }
-                    return (event_card_list);
-                  }else{
-                    return (<h1>ロード中</h1>);
-                  }
-                })()}
+            {this.createEventView()}
+            <Grid
+               container
+               direction="row"
+               justify="flex-end"
+               alignItems="center"
+            >
+               <Button 
+                  variant="contained" 
+                  color="default" 
+                  className={classes.button} 
+                  onClick={() => {
+                     window.scrollTo(0,0);
+               }}>
+                  ページTOP
+                  <ArrowUpward className={classes.rightIcon} />
+               </Button>
             </Grid>
          </Grid>
-       );
+      );
+   }
+
+   createEventView(){
+      const {eventStore} = this.props;
+      let dom;
+      if(!eventStore.event_view_loading){
+         let eventbox = [];
+         eventStore.acquired_event_data.forEach(event_data => {
+            eventbox.push((
+               <Grid item xs={12}>
+                  <EventCard eventData={event_data} />
+               </Grid>
+            ));
+         });
+         dom = eventbox;
+      }else{
+         dom = (<CircularProgress size={100} />);
+      }
+      return dom;
    }
 
 }
