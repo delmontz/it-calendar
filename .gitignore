@@ -6,4 +6,7 @@ package-lock.json
 .env
 firebase-debug.log
 .firebase
+firebase/public
+client/.next
+client/out
 
