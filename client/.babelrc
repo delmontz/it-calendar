@@ -1,9 +1,8 @@
 {
   "presets": [
-    "next/babel"
+    "env",
+    "react",
+    "stage-2"
   ],
-  "plugins": [
-    ["@babel/plugin-proposal-decorators", { "legacy": true }],
-    ["@babel/plugin-proposal-class-properties", { "loose": true }]
-  ]
+  "plugins": ["transform-decorators-legacy"]
 }
