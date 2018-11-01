@@ -52,13 +52,11 @@ class AppContainer extends React.Component {
             <div className={classes.root}>
                <Toolbar className={classes.toolbarMain}>
                   <Typography
-                     variant="h2"
-                     color="inherit"
+                     variant="display3"
                      align="center"
-                     noWrap
                      className={classes.toolbarTitle}
                   >
-                     Geek Calendar 開発版
+                     Geek Calendar α
                   </Typography>
                </Toolbar>
                <main>

@@ -5,7 +5,7 @@ export default class EventStore {
    @observable selected_date = new Date();
    @observable view_current_str = '今日のイベント';
    @observable acquired_event_data = [];
-   @observable event_view_loading = true;
+   @observable event_view_loading = 'init';
 
    @action setSelectingDate = (date) => {
       this.selected_date = date;
