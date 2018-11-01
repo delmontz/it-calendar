@@ -5,7 +5,7 @@ require('dotenv').config();
 const ENV = process.env;
 
 /* config */
-const PERIOD = '2018010';
+const PERIOD = '201810';
 const ACQUISITION = 100;
 
 /******************/
@@ -69,7 +69,7 @@ async function getDailyEventData(year, month, day, index) {
    try {
       acquired_data = await web.get('https://connpass.com/api/v1/event/')
          .query({
-            ymd: year + month + day,
+            ymd: year + month + ('00' + day).slice(-2),
             count: ACQUISITION,
             order: 3,
             start: index
@@ -130,8 +130,10 @@ async function getPrefecture(address){
       address = String(address);
       result = address.match(/([^市区町村]{2}[都道府県]|[^市区町村]{3}県)/);
       if(result){
-         result = result[0];
+         result = result[0].trim();
+         console.log('No Google');
       }else{
+         console.log('YES Google');
          await web.get('https://maps.googleapis.com/maps/api/place/textsearch/json')
          .query({
             key: ENV.GOOGLE_MAP_PLACE,
@@ -140,16 +142,19 @@ async function getPrefecture(address){
          }).then(res => {
             res = res.body;
             if(res.status === 'OK'){
-               result = res.results[0].formatted_address.replace(/^(.+?) /, '');
+               result = res.results[0].formatted_address.replace(/^(.+?)、/, '');
+               console.log(result);
                result = result.match(/([^市区町村]{2}[都道府県]|[^市区町村]{3}県)/);
-               result = result[0];
+               if(result){
+                  result = result[0];
+               }
             }else{
                result = address;
             }
          });
       }
    }
-   return result.trim();
+   return result;
 }
 
 
