@@ -33,6 +33,7 @@
     "react": "^16.2.0",
     "react-day-picker": "^7.1.10",
     "react-dom": "^16.2.0",
+    "react-twitter-embed": "^2.0.3",
     "style-loader": "^0.21.0",
     "superagent": "^3.8.3"
   }
