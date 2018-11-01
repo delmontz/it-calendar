@@ -34,7 +34,7 @@ class EventCardComponent extends React.Component {
       const { classes, eventData } = this.props;
       return (
          <React.Fragment>
-            <Card className={classes.card}>
+            <Card className={classes.card} raised={true}>
                <CardContent className={classes.content}>
                   <CardHeader
                      avatar={
