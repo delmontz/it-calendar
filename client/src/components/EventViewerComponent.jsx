@@ -27,8 +27,11 @@ class EventViewerComponent extends React.Component{
    
    constructor(props){
       super(props);
+   }
+
+   componentWillMount(){
       /* 最初は当日のイベントを表示する */
-      props.eventStore.setSelectingDate(new Date());
+      this.props.eventStore.setSelectingDate(new Date());
    }
 
    render(){
