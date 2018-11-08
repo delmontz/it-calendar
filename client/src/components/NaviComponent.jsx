@@ -34,7 +34,7 @@ class NaviComponent extends React.Component{
                </Card>
             </Grid>
          </Grid>
-       );
+      );
    }
 
 }

@@ -15,7 +15,6 @@ export default class EventStore {
          .query({ ymd: '' + date.getFullYear() + ('00' + (date.getMonth() + 1)).slice(-2) + ('00' + date.getDate()).slice(-2) })
          .set('Access-Control-Allow-Origin', '*')
          .then(function (res) {
-            console.log(res.body);
             self.acquired_event_data = res.body;
          });
    }
