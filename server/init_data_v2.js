@@ -5,7 +5,7 @@ require('dotenv').config();
 const ENV = process.env;
 
 /* config */
-const PERIOD = '201810';
+const PERIOD = '201809';
 const ACQUISITION = 100;
 
 /******************/
@@ -151,6 +151,8 @@ async function getPrefecture(address){
             }else{
                result = address;
             }
+         }).catch(err => {
+            console.log(err);
          });
       }
    }
