@@ -2,10 +2,11 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-
+import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CardHeader from '@material-ui/core/CardHeader';
 import Avatar from '@material-ui/core/Avatar';
+import LinkIcon from '@material-ui/icons/Link';
 
 const styles = theme => ({
    card: {
@@ -16,6 +17,10 @@ const styles = theme => ({
    content: {
       justifyContent: 'space-between',
       flexDirection: 'row'
+   },
+   button: {
+      margin: '10px',
+      height: '50px'
    }
 });
 
@@ -28,31 +33,38 @@ class EventCardComponent extends React.Component {
    render() {
       const { classes, eventData } = this.props;
       return (
-         <div>
-            <Card className={classes.card}>
+         <React.Fragment>
+            <Card className={classes.card} raised={true}>
                <CardContent className={classes.content}>
                   <CardHeader
                      avatar={
-                        <Avatar aria-label="Recipe">
-                           😁
-                        </Avatar>
+                        <Button 
+                           variant="contained"
+                           className={classes.button}
+                           onClick={() => {
+                              window.open(eventData.url, 'newtab');
+                           }}
+                        >
+                           <LinkIcon />
+                           詳細はこちら
+                        </Button>
                      }
                      title={<h1>{eventData.title}</h1>}
                   />
                   <Typography variant="h6">📅日時</Typography>
-                  <Typography variant="subheading" color="textSecondary">{this.getOpenTime(eventData.open_time)}</Typography>
+                  <Typography variant="body2">{this.getOpenTime(eventData.open_time)}</Typography>
                   <Typography variant="h6">🌏場所</Typography>
-                  <Typography variant="subheading" color="textSecondary">{eventData.place}</Typography>
+                  <Typography variant="body2">{eventData.place}</Typography>
                   <Typography variant="h6">🏡住所</Typography>
-                  <Typography variant="subheading" color="textSecondary">{eventData.address}</Typography>
-                  <Typography variant="subheading" color="textSecondary"><div dangerouslySetInnerHTML={{ __html: eventData.description }} /></Typography>
+                  <Typography variant="body2">{eventData.address}</Typography>
+                  <Typography variant="body2"><div dangerouslySetInnerHTML={{ __html: eventData.description }} /></Typography>
                </CardContent>
             </Card>
-         </div>
+         </React.Fragment>
       );
    }
 
-   getOpenTime(opentime){
+   getOpenTime(opentime) {
       let date = new Date(opentime);
       let year = date.getFullYear();
       let month = date.getMonth() + 1;
