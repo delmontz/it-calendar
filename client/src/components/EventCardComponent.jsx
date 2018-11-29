@@ -5,7 +5,6 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CardHeader from '@material-ui/core/CardHeader';
-import Avatar from '@material-ui/core/Avatar';
 import LinkIcon from '@material-ui/icons/Link';
 
 const styles = theme => ({
@@ -51,12 +50,12 @@ class EventCardComponent extends React.Component {
                      }
                      title={<h1>{eventData.title}</h1>}
                   />
-                  <Typography variant="h6">📅日時</Typography>
-                  <Typography variant="body2">{this.getOpenTime(eventData.open_time)}</Typography>
-                  <Typography variant="h6">🌏場所</Typography>
-                  <Typography variant="body2">{eventData.place}</Typography>
-                  <Typography variant="h6">🏡住所</Typography>
-                  <Typography variant="body2">{eventData.address}</Typography>
+                  <Typography variant="title">📅日時</Typography>
+                  <Typography variant="body2" gutterBottom={true}>{this.getOpenTime(eventData.open_time)}</Typography>
+                  <Typography variant="title">🌏場所</Typography>
+                  <Typography variant="body2" gutterBottom={true}>{eventData.place}</Typography>
+                  <Typography variant="title">🏡住所</Typography>
+                  <Typography variant="body2" gutterBottom={true}>{eventData.address}</Typography>
                   <Typography variant="body2"><div dangerouslySetInnerHTML={{ __html: eventData.description }} /></Typography>
                </CardContent>
             </Card>

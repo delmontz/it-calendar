@@ -42,7 +42,7 @@ class NoticeComponent extends React.Component{
                </div>
             </Card>
          </React.Fragment>
-       );
+      );
    }
 
 }

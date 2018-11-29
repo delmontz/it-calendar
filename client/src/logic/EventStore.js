@@ -6,6 +6,7 @@ export default class EventStore {
    @observable view_current_str = '今日のイベント';
    @observable acquired_event_data = [];
    @observable event_view_loading = 'init';
+   @observable select_prefecture = 'ALL';
 
    @action setSelectingDate = (date) => {
       this.selected_date = date;
@@ -16,10 +17,13 @@ export default class EventStore {
          .query({ ymd: '' + date.getFullYear() + ('00' + (date.getMonth() + 1)).slice(-2) + ('00' + date.getDate()).slice(-2) })
          .set('Access-Control-Allow-Origin', '*')
          .then(function (res) {
-            console.log(res.body);
             self.acquired_event_data = res.body;
             self.event_view_loading = false;
          });
+   }
+
+   @action setPrefecture(event){
+      this.select_prefecture = event.target.value;
    }
 
 }

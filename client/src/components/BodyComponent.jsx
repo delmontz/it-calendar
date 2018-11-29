@@ -5,6 +5,7 @@ import Grid from "@material-ui/core/Grid";
 import Navi from "./NaviComponent";
 import EventViewer from "./EventViewerComponent";
 import Notice from "./NoticeComponent";
+import SelectPrefecture from "./SelectPrefectureComponent"
 
 /* TODO: marginが効いていないが？ないとスタイルが崩れる要調査 */
 const styles = theme => ({
@@ -30,6 +31,7 @@ class BodyComponent extends React.Component{
             <Grid container spacing={24}>
                <Grid item xs={9}>
                   <div className={classes.div}>
+                     <SelectPrefecture />
                      <EventViewer />
                   </div>
                </Grid>
