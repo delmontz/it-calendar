@@ -11,14 +11,14 @@ import EventCard from './EventCardComponent';
 const styles = theme => ({
    button: {
       margin: theme.spacing.unit
-    },
+   },
    rightIcon: {
       marginLeft: theme.spacing.unit,
-    },
-    div: {
+   },
+   div: {
       display: 'flex',
       justifyContent: 'flex-end'
-    }
+   }
 });
 
 @inject('eventStore')
@@ -62,16 +62,19 @@ class EventViewerComponent extends React.Component{
    }
 
    createEventView(){
-      const {eventStore} = this.props;
+      const { eventStore } = this.props;
       let dom;
       if(!eventStore.event_view_loading){
          let eventbox = [];
          eventStore.acquired_event_data.forEach(event_data => {
-            eventbox.push((
-               <Grid item xs={12}>
-                  <EventCard eventData={event_data} />
-               </Grid>
-            ));
+            /* 表示フィルタリング */
+            if((eventStore.select_prefecture === 'ALL') || (eventStore.select_prefecture === event_data.prefecture)){
+               eventbox.push((
+                  <Grid item xs={12} key={event_data.event_id}> {/* key ワーニング対策 */}
+                     <EventCard eventData={event_data} />
+                  </Grid>
+               ));
+            }
          });
          dom = eventbox;
       }else{
